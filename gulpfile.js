@@ -26,9 +26,21 @@ gulp.task('dev:watch', () => {
   const config = createDevConfig();
 
   config.output.publicPath = "http://localhost:8081/";
+  config.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  for (let entryName in config.entry) {
+    if (!config.entry.hasOwnProperty(entryName))
+      continue;
+
+    let entryItems = config.entry[entryName];
+    if (typeof (entryItems) === "string")
+      entryItems = config.entry[entryName] = [entryItems];
+    entryItems.splice(0, 0, "webpack-dev-server/client", "webpack/hot/only-dev-server");
+  }
 
   const compiler = webpack(config);
   const devServer = new webpackDevServer(compiler, {
+    hot: true,
     inline: true,
     stats: {
       colors: true,

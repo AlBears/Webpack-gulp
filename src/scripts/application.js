@@ -18,4 +18,4 @@ userController($mount, store);
 cool.func1();
 cool.func2();
 
-console.log('something');
+console.log('something NEWWWWW');

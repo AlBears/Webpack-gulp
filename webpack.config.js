@@ -1,4 +1,5 @@
-var path = require('path');
+var path = require('path'),
+    webpack = require('webpack');
 
 function config() {
   return {
@@ -40,7 +41,8 @@ function config() {
           exclude: '/node_modules/'
         }
       ]
-    }
+    },
+    plugins: []
   };
 }
 
