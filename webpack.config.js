@@ -5,7 +5,8 @@ function config() {
   return {
     entry: {
       application: "./src/scripts/application",
-      contact: './src/scripts/contact'
+      contact: './src/scripts/contact',
+      vendor: ['jquery', 'lodash', 'jquery-ui']
     },
     output: {
       path: path.join(__dirname, 'public/assets'),
@@ -17,22 +18,22 @@ function config() {
       loaders: [
         {
           test: /\.js$/,
-          loaders: ['babel-loader'],
+          loader: ['babel-loader'],
           exclude: '/node_modules/'
         },
         {
           test: /\.less$/,
-          loaders: ['style-loader', 'css-loader', 'less-loader'],
+          loader: ['style-loader', 'css-loader', 'less-loader'],
           exclude: '/node_modules/'
         },
         {
           test: /\.css$/,
-          loaders: ['style-loader', 'css-loader'],
+          loader: ['style-loader', 'css-loader'],
           exclude: '/node_modules/'
         },
         {
           test: /\.(png|jpg|jpeg|gif|woff|woff2|ttf|eot|svg)$/,
-          loaders: 'url-loader?limit=5000',
+          loader: 'url-loader?limit=5000',
           exclude: '/node_modules/'
         },
         {
@@ -42,7 +43,12 @@ function config() {
         }
       ]
     },
-    plugins: []
+    plugins: [
+      new webpack.optimize.CommonsChunkPlugin({
+        name:"vendor",
+        file: "vendor.js"
+      })
+    ]
   };
 }
 

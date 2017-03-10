@@ -4,10 +4,11 @@ var gulp = require('gulp'),
     $ = require('gulp-load-plugins')(),
     webpack = require('webpack'),
     webpackConfig = require('./webpack.config'),
-    webpackDevServer = require('webpack-dev-server');
+    webpackDevServer = require('webpack-dev-server'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-gulp.task('dev', callback => {
-  const compiler = webpack(createDevConfig());
+function runWebpack(config, callback) {
+  const compiler = webpack(config);
   compiler.run((err, stats) => {
     if (err) {
       console.error(err);
@@ -20,10 +21,15 @@ gulp.task('dev', callback => {
 
     callback();
   });
-});
+}
+
+gulp.task('dev', callback => runWebpack(createDevConfig(), callback));
+
+gulp.task('prod', callback => runWebpack(createProdConfig(), callback));
 
 gulp.task('dev:watch', () => {
   const config = createDevConfig();
+
 
   config.output.publicPath = "http://localhost:8081/";
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -56,5 +62,26 @@ gulp.task('dev:watch', () => {
 function createDevConfig() {
 
   const config = Object.assign({}, webpackConfig);
+  config.devtool = "eval-source-map";
+  config.plugins.push(new webpack.DefinePlugin({
+    env: '"dev"'
+  }))
+  return config;
+}
+
+function createProdConfig() {
+  const config = Object.assign({}, webpackConfig);
+  config.devtool = "source-map";
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+  config.plugins.push(new webpack.DefinePlugin({
+    env: '"prod"'
+  }));
+  config.plugins.push(new ExtractTextPlugin("[name].css"));
+  config.module.loaders[1].loader = ExtractTextPlugin.extract({
+    loader: ['css-loader', 'less-loader']
+  });
+  config.module.loaders[2].loader = ExtractTextPlugin.extract({
+    loader: 'css-loader'
+  });
   return config;
 }
