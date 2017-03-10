@@ -21,22 +21,22 @@ function config() {
         },
         {
           test: /\.less$/,
-          use: [{
-                loader: "style-loader" // creates style nodes from JS strings
-            }, {
-                loader: "css-loader" // translates CSS into CommonJS
-            }, {
-                loader: "less-loader" // compiles Less to CSS
-            }]
-        },
-        {
-          test: /\.css$/,
-          loaders: 'css-loader',
+          loaders: ['style-loader', 'css-loader', 'less-loader'],
           exclude: '/node_modules/'
         },
         {
-          test: /\.(png|jpg|jpeg|gif|woff|ttf|eot|svg)$/,
+          test: /\.css$/,
+          loaders: ['style-loader', 'css-loader'],
+          exclude: '/node_modules/'
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|woff|woff2|ttf|eot|svg)$/,
           loaders: 'url-loader?limit=5000',
+          exclude: '/node_modules/'
+        },
+        {
+          test: /\.(eot|ttf|wav|mp3)$/,
+          loader: 'file-loader',
           exclude: '/node_modules/'
         }
       ]
@@ -45,4 +45,3 @@ function config() {
 }
 
 module.exports = config();
-//module.exports.clone = config;

@@ -4,6 +4,7 @@ import * as cool from './lib/utility';
 import './script';
 import $ from 'jquery';
 
+
 import "../styles/site.less";
 import "jquery-ui/themes/dark-hive/jquery-ui.css";
 
@@ -16,3 +17,5 @@ userController($mount, store);
 
 cool.func1();
 cool.func2();
+
+console.log('something');
